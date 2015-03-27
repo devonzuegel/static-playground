@@ -4,6 +4,8 @@ title: TEST
 to_fold: h1,h2
 ---
 
+<div id='fold-here'></div>
+
 # Level 1 #
 
 ##### Level 5 #####
