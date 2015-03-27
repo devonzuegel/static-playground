@@ -1,10 +1,10 @@
 ---
 layout: page
 title: TEST
-to_fold: h1,h2
+origami: H1,H2,H3,H4,H5,H6
 ---
 
-<div id='fold-here'></div>
+<div id='origami'></div>
 
 # Level 1 #
 

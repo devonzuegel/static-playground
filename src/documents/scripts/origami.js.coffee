@@ -1,6 +1,7 @@
 	
 class Origami
-	hierarchy = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6']
+
+	hierarchy = []
 
 	## public::constructor()
 	 #		Initialize Origami object
@@ -10,17 +11,16 @@ class Origami
 	 #		true:  if a defined array that doesn't only contain ""
 	 #		false: otherwise
 	constructor: (to_fold) ->
-		to_fold = if is_defined(to_fold) then to_fold else []
-		elems = $.makeArray($('#fold-here').siblings()).reverse()
-		headers = (e for e in elems when e.tagName in hierarchy)
+		hierarchy = if is_defined(to_fold) then to_fold else []
+		origami_tag = $('#origami')[0] || $('body')
+		console.log origami_tag
+		elems = $.makeArray($('#origami').siblings())
 
+		for hdr, h in elems when hdr.tagName in hierarchy
+		# 	for elem, e in elems[h+1..] when is_child_of(elem, hdr)
+				console.log " #{hdr.tagName}"
+		# 	hdr.innerHTML = "<a href='#'>+ #{hdr.innerHTML}</a>"
 
-		#e.innerHTML in hierarchy
-		# elems[0].innerHTML = '+ ' + elems[0].innerHTML
-		for e in elems by -1
-			e.innerHTML = "<a href='#'>+ #{e.innerHTML}</a>"
-
-		console.log headers
 
 	##### Private ###############################################
 
@@ -33,6 +33,10 @@ class Origami
 	 #		false: otherwise
 	is_defined = (to_fold) ->
 		return (to_fold) and (JSON.stringify(to_fold) != '[""]')
+
+	is_child_of = (elem, hdr) ->
+		hierarchy.indexOf elem.tagName < hierarchy.indexOf hdr.tagName
+
 
 
 $(document).ready ->
