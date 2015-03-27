@@ -43,7 +43,9 @@ body
 
 	script.
 		//- Set 
-		document.origami = '#{document.origami}'.split(',');
+		document.origami = {
+			hierarchy: '#{document.origami}'.split(',')
+		};
 
 
 		//- Add Google Analytics script

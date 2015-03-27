@@ -5,44 +5,41 @@ class Origami
 	## public::constructor()
 	 #		Initialize Origami object.
 	 # Params
-	 #  	to_fold {array}: List of header types to fold.
-	constructor: (to_fold) ->
-		hierarchy = (to_fold).reverse() if is_defined(to_fold)
-		console.log hierarchy
+	 #  	optns {object}: Defines options for Origami.
+	constructor: (optns) ->
+		hierarchy = (optns.hierarchy).reverse() if is_defined(optns.hierarchy)
 		fold_here = $('#origami') || $('body')
 		elems = $.makeArray(fold_here.siblings())
 
-		for hdr, h in elems when hdr.tagName in hierarchy
-			# Create closure on `hdr` and `h`.
-			do (hdr, h) ->
-				# Update header.
-				hdr.id = "fold-hdr-#{h}"
-				hdr.innerHTML = "<a style='cursor:pointer'>+ #{hdr.innerHTML}</a>"
-
-				# Find all children to be folded under `hdr`.
-				children = []
-				for e in elems[h+1..]
-					if not is_child_of(e, hdr) then break
-					children.push e
-				
-				# Wrap children in `fold-me-#` div.
+		for header, h in elems when header.tagName in hierarchy
+			do (header, h) ->   # Closure on `hdr` and `h`.
+				make_elem_header(header, h)
+				children = get_children(elems, header, h)
 				$(children).wrapAll("<div id='fold-me-#{h}'></div>")
 
-				# Define sliding collapse/open behavior on header click.
-				$("#fold-hdr-#{h}").click -> $("#fold-me-#{h}").slideToggle()
+				$hdr = $("#fold-hdr-#{h}")
+				$div = $("#fold-me-#{h}")
+				$btn = $("#origami-btn-#{h}")[0]
+
+				##
+				# Define sliding collapse/open and changing button
+				# behavior on header click.
+				$hdr.click ->
+					$div.slideToggle()
+					$btn.innerText = if $btn.innerText=='+' then '-' else '+'
 
 
 	##### Private ###############################################
 
 	## private::is_defined()
-	 #		Normalize `to_fold` array.
+	 #		Normalize `hierarchy` array.
 	 # Params
-	 #  	to_fold {array}: List of header types to fold.
+	 #  	hierarchy {array}: List of header types to fold.
 	 # Return value
 	 #		true:  if a defined array that doesn't only contain "".
 	 #		false: otherwise
-	is_defined = (to_fold) ->
-		(to_fold) and (JSON.stringify(to_fold) != '[""]')
+	is_defined = (hierarchy) ->
+		(hierarchy) and (JSON.stringify(hierarchy) != '[""]')
 
 
 	## private::is_child_of()
@@ -58,6 +55,53 @@ class Origami
 		i_h = hierarchy.indexOf hdr.tagName
 		return i_e < i_h
 
+	make_elem_header = (header, h) ->
+		# Update header.
+		$(header).css('cursor', 'pointer')
+		header.id = "fold-hdr-#{h}"
+		header.innerHTML = "
+			<span class='origami-btn' id='origami-btn-#{h}'>+</span>
+			#{header.innerHTML}
+			"
+
+	get_children = (elems, header, h) ->
+		# Find all children to be folded under `hdr`.
+		children = []
+		for e in elems[h+1..]
+			if not is_child_of(e, header) then break
+			children.push e
+		children
+
 
 $(document).ready ->
-	origami = new Origami(document.origami)
+	# Only proceed if an `#origami` element is defined. 
+	if $('#origami')
+		## Sets default options. Can be overidden by `document.origami`.
+		optns = {
+			##
+			# The location of level to fold, indicated by a div with
+			# id of "#origami".
+			fold_here: $('#origami')
+
+			# All headers foldable, in this hierarchy.
+			hierarchy: ["H1", "H2", "H3", "H4", "H5", "H6"]
+
+			# When open, btn is `+`; when closed, it is `-`.
+			btn_symbols:
+				open: 	'+'
+				closed: '-'
+
+			# No btns start closed
+			start_closed: []
+
+			# Defines class names for header and button styles.
+			header_klass: undefined
+			button_klass: undefined
+		}
+
+		# Override default options with user-provided options.
+		$.extend(optns, document.origami)
+
+		origami = new Origami(optns)
+
+

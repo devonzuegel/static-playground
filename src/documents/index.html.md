@@ -1,7 +1,7 @@
 ---
 layout: page
 title: TEST
-origami: H1,H2,H3,H4,H5,H6
+origami: H1,H2,H3
 ---
 
 <div id='origami'></div>
