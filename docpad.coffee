@@ -21,7 +21,7 @@ docpadConfig = {
 			]
 
 			# The default title of our website
-			title: "Your Website"
+			title: "Static Playground"
 
 			# The website description (for SEO)
 			description: """
@@ -45,6 +45,7 @@ docpadConfig = {
 				'//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'
 				'js/plugins.js'
 				'js/main.js'
+				'scripts/origami.js'
 			]
 
 
