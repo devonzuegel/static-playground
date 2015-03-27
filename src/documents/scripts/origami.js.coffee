@@ -1,6 +1,5 @@
 	
 class Origami
-
 	hierarchy = []
 
 	## public::constructor()
@@ -11,16 +10,18 @@ class Origami
 	 #		true:  if a defined array that doesn't only contain ""
 	 #		false: otherwise
 	constructor: (to_fold) ->
-		hierarchy = if is_defined(to_fold) then to_fold else []
-		origami_tag = $('#origami')[0] || $('body')
-		console.log origami_tag
-		elems = $.makeArray($('#origami').siblings())
+		hierarchy = to_fold if is_defined(to_fold)
+		fold_here = $('#origami') || $('body')
+		elems = $.makeArray(fold_here.siblings())
+		console.log hierarchy
 
 		for hdr, h in elems when hdr.tagName in hierarchy
-		# 	for elem, e in elems[h+1..] when is_child_of(elem, hdr)
-				console.log " #{hdr.tagName}"
-		# 	hdr.innerHTML = "<a href='#'>+ #{hdr.innerHTML}</a>"
-
+			hdr.innerHTML = "<a href='#'>+ #{hdr.innerHTML}</a>"
+			children = (e for e in elems[h+1..] when is_child_of(e, hdr))
+			
+			console.log ''
+			console.log hdr
+			console.log children
 
 	##### Private ###############################################
 
@@ -34,8 +35,8 @@ class Origami
 	is_defined = (to_fold) ->
 		return (to_fold) and (JSON.stringify(to_fold) != '[""]')
 
-	is_child_of = (elem, hdr) ->
-		hierarchy.indexOf elem.tagName < hierarchy.indexOf hdr.tagName
+	is_child_of = (el, hdr) ->
+		hierarchy.indexOf el.tagName < hierarchy.indexOf hdr.tagName
 
 
 
