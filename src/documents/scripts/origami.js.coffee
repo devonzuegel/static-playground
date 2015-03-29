@@ -7,9 +7,8 @@ class Origami
 	 # Params
 	 #  	optns {object}: Defines options for Origami.
 	constructor: (optns) ->
-		console.log optns.fold_here.parent()
 		hierarchy = (optns.hierarchy).reverse() if is_defined(optns.hierarchy)
-		elems = $.makeArray(optns.fold_here.siblings())
+		elems = $.makeArray($('#origami').children())
 
 		for header, h in elems when header.tagName in hierarchy
 			do (header, h) ->   # Closure on `hdr` and `h`.
@@ -22,14 +21,16 @@ class Origami
 				$btn = $("#origami-btn-#{h}")[0]
 
 				##
-				# Define sliding collapse/open and changing button
-				# behavior on header click.
+				 # Define sliding collapse/open and changing button
+				 # behavior on header click.
 				$hdr.click ->
 					$div.slideToggle()
 					open = optns.btn_symbols.open
 					closed = optns.btn_symbols.closed
 					console.log "#{$btn.innerText}==#{open} = #{$btn.innerText==open}"
 					$btn.innerText = if $btn.innerText==open then closed else open
+
+		$('#origami').show()
 
 
 	##### Private ###############################################
@@ -93,24 +94,25 @@ class Origami
 		children
 
 
-$(document).ready ->
+## Default options can be overidden by `document.origami`.
+optns = {
+	hierarchy: ['H1', 'H2', 'H3', 'H4', 'H5', 'H6']
+	btn_symbols:
+		open: 	'+'
+		closed: '-'
+	start_closed: [] # No headers start folded.
+	header_klass: undefined
+	button_klass: undefined
+}
 
-	## Default options can be overidden by `document.origami`.
-	optns = {
-		fold_here: $('#origami')
-		hierarchy: ['H1', 'H2', 'H3', 'H4', 'H5', 'H6']
-		btn_symbols:
-			open: 	'+'
-			closed: '-'
-		start_closed: [] # No headers start folded.
-		header_klass: undefined
-		button_klass: undefined
-	}
+
+
+$(document).ready ->
 
 	# Override default options with user-provided options.
 	$.extend(optns, document.origami)
 
 	# Only proceed if an `#origami` element is defined. 
-	if $(optns.fold_here) then origami = new Origami(optns)
+	if $('#origami') then origami = new Origami(optns)
 
 

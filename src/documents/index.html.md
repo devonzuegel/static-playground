@@ -4,8 +4,6 @@ title: TEST
 to_fold: H1,H2,H3,H4,H5
 ---
 
-<div id='origami'></div>    
-
 # Level 1 #
 
 ##### Level 5 #####
