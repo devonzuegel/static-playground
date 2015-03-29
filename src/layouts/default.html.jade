@@ -18,8 +18,10 @@ head
 	!= getBlock('styles').add(site.styles).toHTML()
 	script(src='js/vendor/modernizr-2.6.2.min.js')
 body
+
 	style.
 		#origami { display: none; }
+
 
 	//if lt IE 7
 		p.browsehappy
@@ -31,9 +33,9 @@ body
 				|upgrade your browser
 			|to improve your experience.
 
-	div(class="page-content")
-		!= content
+	div(class="page-content")!= content
 	
+
 	script.
 		//- JQuery script.
 		window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')

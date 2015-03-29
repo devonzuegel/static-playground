@@ -30,6 +30,9 @@ class Origami
 					console.log "#{$btn.innerText}==#{open} = #{$btn.innerText==open}"
 					$btn.innerText = if $btn.innerText==open then closed else open
 
+		##
+		 # Once everything's done, display `#origami` (and its
+		 # foldable children).
 		$('#origami').show()
 
 
@@ -70,6 +73,7 @@ class Origami
 	make_elem_header = (header, h, optns) ->
 		# Update header.
 		$(header).css('cursor', 'pointer')
+		$(header).addClass(optns.header_klass)
 		header.id = "fold-hdr-#{h}"
 		header.innerHTML = "
 			<span id='origami-btn-#{h}'
@@ -100,7 +104,7 @@ optns = {
 	btn_symbols:
 		open: 	'+'
 		closed: '-'
-	start_closed: [] # No headers start folded.
+	start_closed: []  # No headers start folded.
 	header_klass: undefined
 	button_klass: undefined
 }
