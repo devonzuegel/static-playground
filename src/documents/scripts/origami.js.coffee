@@ -7,6 +7,7 @@ class Origami
 	 # Params
 	 #  	optns {object}: Defines options for Origami.
 	constructor: (optns) ->
+		console.log optns.fold_here.parent()
 		hierarchy = (optns.hierarchy).reverse() if is_defined(optns.hierarchy)
 		elems = $.makeArray(optns.fold_here.siblings())
 
@@ -57,6 +58,14 @@ class Origami
 		i_h = hierarchy.indexOf hdr.tagName
 		return i_e < i_h
 
+	## private::make_elem_header()
+	 #		Add btn to header, make clickable.
+	 # Params
+	 #		header {html}: header html object
+	 #		h {int}:			 header id number
+	 # 		optns {obj}:	 hash of user-defined optns
+	 # Returns
+	 # 		Side-effects only.
 	make_elem_header = (header, h, optns) ->
 		# Update header.
 		$(header).css('cursor', 'pointer')
@@ -67,6 +76,14 @@ class Origami
 			#{header.innerHTML}
 			"
 
+	## private::get_children()
+	 # 		Gets sub-headers under given header.
+	 # Params
+	 #		elems {[html]}:	siblings of header, array of html objs
+	 #		header {html}:	header html object
+	 #		h {int}:				header id number
+	 # Returns
+	 # 		Side-effects only.
 	get_children = (elems, header, h) ->
 		# Find all children to be folded under `hdr`.
 		children = []
@@ -76,14 +93,12 @@ class Origami
 		children
 
 
-# $(document).ready ->
-
-$ ->
+$(document).ready ->
 
 	## Default options can be overidden by `document.origami`.
 	optns = {
 		fold_here: $('#origami')
-		hierarchy: ["H1", "H2", "H3", "H4", "H5", "H6"]
+		hierarchy: ['H1', 'H2', 'H3', 'H4', 'H5', 'H6']
 		btn_symbols:
 			open: 	'+'
 			closed: '-'
