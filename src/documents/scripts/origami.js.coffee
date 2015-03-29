@@ -10,7 +10,7 @@ class Origami
 		hierarchy = (optns.hierarchy).reverse() if is_defined(optns.hierarchy)
 		elems = $.makeArray($('#origami').children())
 
-		for hdr, h in elems when hdr.tagName in hierarchy
+		for hdr, h in elems when hdr.tagName in optns.fold
 			do (hdr, h) ->   # Closure on `hdr` and `h`.
 				make_elem_header(hdr, h, optns)
 				children = get_children(elems, hdr, h)
@@ -124,6 +124,7 @@ class Origami
 ## Default options can be overidden by `document.origami`.
 optns = {
 	hierarchy: ['H1', 'H2', 'H3', 'H4', 'H5', 'H6']
+	fold:	 		 ['H1', 'H2', 'H3', 'H4', 'H5', 'H6']
 	btn_symbols:
 		open: 	'+'
 		closed: '-'

@@ -15,7 +15,7 @@
       elems = $.makeArray($('#origami').children());
       for (h = i = 0, len = elems.length; i < len; h = ++i) {
         hdr = elems[h];
-        if (ref = hdr.tagName, indexOf.call(hierarchy, ref) >= 0) {
+        if (ref = hdr.tagName, indexOf.call(optns.fold, ref) >= 0) {
           (function(hdr, h) {
             var $btn, $div, $hdr, children, ref1;
             make_elem_header(hdr, h, optns);
@@ -84,6 +84,7 @@
 
   optns = {
     hierarchy: ['H1', 'H2', 'H3', 'H4', 'H5', 'H6'],
+    fold: ['H1', 'H2', 'H3', 'H4', 'H5', 'H6'],
     btn_symbols: {
       open: '+',
       closed: '-'
