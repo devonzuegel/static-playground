@@ -20,7 +20,15 @@ head
 body
 
 	style.
-		#origami { display: none; }
+		#origami { display: none }
+		.purple { color: purple }
+		.red { color: red }
+		.origami-btn { 
+			width: 25px; 
+			text-align: right; 
+			padding-right: 10px; 
+			float:left; 
+		}
 
 	//if lt IE 7
 		p.browsehappy
@@ -49,6 +57,14 @@ body
 		document.origami = { 
 			hierarchy: '#{document.to_fold}'.split(','),
 			start_closed: ['H3', 'H4', 'H5'],
+			btn_klass: {
+				open: 'purple',
+				closed: 'red',
+			},
+			hdr_klass: {
+				open: 'purple',
+				closed: 'red',
+			},
 		};
 
 		//- Google Analytics script.

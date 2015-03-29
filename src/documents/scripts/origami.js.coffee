@@ -10,10 +10,10 @@ class Origami
 		hierarchy = (optns.hierarchy).reverse() if is_defined(optns.hierarchy)
 		elems = $.makeArray($('#origami').children())
 
-		for header, h in elems when header.tagName in hierarchy
-			do (header, h) ->   # Closure on `hdr` and `h`.
-				make_elem_header(header, h, optns)
-				children = get_children(elems, header, h)
+		for hdr, h in elems when hdr.tagName in hierarchy
+			do (hdr, h) ->   # Closure on `hdr` and `h`.
+				make_elem_header(hdr, h, optns)
+				children = get_children(elems, hdr, h)
 				$(children).wrapAll("<div id='fold-me-#{h}'></div>")
 
 				$hdr = $("#fold-hdr-#{h}")
@@ -22,10 +22,13 @@ class Origami
 
 				##
 				 # Define sliding collapse/open and changing button
-				 # behavior on header click.
+				 # behavior on hdr click.
 				$hdr.click -> open_close($hdr, $div, $btn, optns)
 
-				if header.tagName in optns.start_closed
+				##
+				 # If hdr is defined as one of the levels to begin
+				 # closed, then close it.
+				if hdr.tagName in optns.start_closed
 					open_close($hdr, $div, $btn, optns)
 
 		##
@@ -69,13 +72,12 @@ class Origami
 	 # Returns
 	 # 		Side-effects only.
 	make_elem_header = (header, h, optns) ->
-		# Update header.
 		$(header).css('cursor', 'pointer')
-		$(header).addClass(optns.header_klass)
+		$(header).addClass(optns.hdr_klass.open)
 		header.id = "fold-hdr-#{h}"
 		header.innerHTML = "
-			<span id='origami-btn-#{h}'
-						class='origami-btn'>#{optns.btn_symbols.open}</span>
+			<span class='origami-btn #{optns.btn_klass.open}'
+						id='origami-btn-#{h}'>#{optns.btn_symbols.open}</span>
 			#{header.innerHTML}
 			"
 
@@ -96,17 +98,25 @@ class Origami
 		children
 
 	## private::open_close()
-	 #		Close the sub-headers under the given header.
+	 #		Close the given sub-headers in $div.
 	 # Params
-	 #		$hdr {jquery}: header
-	 #		$div {jquery}: contains 
-	 # 		Given a header and the div containing its sub-headers,
-	 #		
+	 #		$div {jquery}: contains sub-headers to be folded
+	 #		$btn {jquery}: button whose buttons have to be updated
+	 # 		optns {obj}:	 hash of user-defined optns
+	 # Returns
+	 # 		Side-effects only.
 	open_close = ($hdr, $div, $btn, optns) ->
+		# Fold sub-headers.
 		$div.slideToggle(optns.duration)
+		$($btn).toggleClass("#{optns.btn_klass.open} 
+												 #{optns.btn_klass.closed}")
+
+		# Update button.
 		open = optns.btn_symbols.open
 		closed = optns.btn_symbols.closed
 		$btn.innerText = if $btn.innerText==open then closed else open
+		$hdr.toggleClass("#{optns.hdr_klass.open} 
+										  #{optns.hdr_klass.closed}")
 
 
 
@@ -117,10 +127,14 @@ optns = {
 	btn_symbols:
 		open: 	'+'
 		closed: '-'
-	start_closed: []  	# No headers start folded.
-	header_klass: ''	 	# No classes defined for header.
-	button_klass: ''	 	# No classes defined for button.
-	duration: 200  	 		# Milliseconds.
+	start_closed: []  # No headers start folded.
+	hdr_klass:  			# No default classes defined for header.
+		open: ''
+		closed: ''
+	btn_klass: 		 		# No default classes defined for button.
+		open: ''
+		closed: ''
+	duration: 200  	 	# Milliseconds.
 }
 
 $(document).ready ->
