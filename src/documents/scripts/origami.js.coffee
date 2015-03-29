@@ -23,12 +23,10 @@ class Origami
 				##
 				 # Define sliding collapse/open and changing button
 				 # behavior on header click.
-				$hdr.click ->
-					$div.slideToggle()
-					open = optns.btn_symbols.open
-					closed = optns.btn_symbols.closed
-					console.log "#{$btn.innerText}==#{open} = #{$btn.innerText==open}"
-					$btn.innerText = if $btn.innerText==open then closed else open
+				$hdr.click -> open_close($hdr, $div, $btn, optns)
+
+				if header.tagName in optns.start_closed
+					open_close($hdr, $div, $btn, optns)
 
 		##
 		 # Once everything's done, display `#origami` (and its
@@ -97,6 +95,21 @@ class Origami
 			children.push e
 		children
 
+	## private::open_close()
+	 #		Close the sub-headers under the given header.
+	 # Params
+	 #		$hdr {jquery}: header
+	 #		$div {jquery}: contains 
+	 # 		Given a header and the div containing its sub-headers,
+	 #		
+	open_close = ($hdr, $div, $btn, optns) ->
+		$div.slideToggle(optns.duration)
+		open = optns.btn_symbols.open
+		closed = optns.btn_symbols.closed
+		$btn.innerText = if $btn.innerText==open then closed else open
+
+
+
 
 ## Default options can be overidden by `document.origami`.
 optns = {
@@ -104,12 +117,11 @@ optns = {
 	btn_symbols:
 		open: 	'+'
 		closed: '-'
-	start_closed: []  # No headers start folded.
-	header_klass: undefined
-	button_klass: undefined
+	start_closed: []  	# No headers start folded.
+	header_klass: ''	 	# No classes defined for header.
+	button_klass: ''	 	# No classes defined for button.
+	duration: 200  	 		# Milliseconds.
 }
-
-
 
 $(document).ready ->
 

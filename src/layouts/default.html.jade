@@ -22,7 +22,6 @@ body
 	style.
 		#origami { display: none; }
 
-
 	//if lt IE 7
 		p.browsehappy
 			|You are using an 
@@ -49,6 +48,7 @@ body
 		//- Origami options.
 		document.origami = { 
 			hierarchy: '#{document.to_fold}'.split(','),
+			start_closed: ['H3', 'H4', 'H5'],
 		};
 
 		//- Google Analytics script.
